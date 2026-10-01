@@ -7,7 +7,7 @@ from app import models
 from app.db import Base, engine, get_db
 from app.schemas import StationCreate, StationOut, StationStatus, StationUpdate
 
-app = FastAPI(title="Dock Control", version="0.1.0")
+app = FastAPI(title="Stations de vélos", version="0.1.0")
 Base.metadata.create_all(bind=engine)
 
 
