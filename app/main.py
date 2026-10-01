@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, status
 
-from app.schemas import StationCreate, StationOut
+from app.schemas import StationCreate, StationOut, StationStatus
 
 app = FastAPI(title="Dock Control", version="0.1.0")
 
@@ -32,3 +32,21 @@ def create_station(data: StationCreate) -> StationOut:
     stations.append(station)
     next_id += 1
     return station
+
+
+@app.get("/stations", response_model=list[StationOut])
+def list_stations(status: StationStatus | None = None) -> list[StationOut]:
+    if status is None:
+        return stations
+    return [s for s in stations if s.status == status]
+
+
+@app.get("/stations/{station_id}", response_model=StationOut)
+def get_station(station_id: int) -> StationOut:
+    for station in stations:
+        if station.id == station_id:
+            return station
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"Station {station_id} not found",
+    )
