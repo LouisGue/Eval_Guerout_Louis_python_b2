@@ -15,3 +15,9 @@ class StationCreate(BaseModel):
 
 class StationOut(StationCreate):
     id: int
+
+
+class StationUpdate(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+    name: str | None = Field(default=None, min_length=1)
+    status: StationStatus | None = None
