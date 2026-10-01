@@ -14,6 +14,7 @@ class StationCreate(BaseModel):
 
 
 class StationOut(StationCreate):
+    model_config = ConfigDict(from_attributes=True)
     id: int
 
 
