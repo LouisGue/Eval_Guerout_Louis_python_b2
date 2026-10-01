@@ -1,8 +1,12 @@
 from fastapi import FastAPI, HTTPException, status
 
+# commentaire noqa: F401 pour que l'extension Ruff ne le delet pas afin qui models.py fonctionne correctement
+from app import models  # noqa: F401
+from app.db import Base, engine
 from app.schemas import StationCreate, StationOut, StationStatus, StationUpdate
 
 app = FastAPI(title="Dock Control", version="0.1.0")
+Base.metadata.create_all(bind=engine)
 
 
 @app.get("/health", status_code=status.HTTP_200_OK)
