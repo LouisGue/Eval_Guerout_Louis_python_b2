@@ -1,5 +1,6 @@
 from fastapi import Depends, FastAPI, HTTPException, status
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app import models
@@ -25,7 +26,14 @@ def create_station(
 ) -> models.Station:
     station = models.Station(**data.model_dump())
     db.add(station)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Station code '{data.code}' already exists",
+        )
     db.refresh(station)
     return station
 
