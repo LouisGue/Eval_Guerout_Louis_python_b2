@@ -11,3 +11,7 @@ class StationCreate(BaseModel):
     name: str = Field(min_length=1)
     capacity: int = Field(ge=1)
     status: StationStatus = "open"
+
+
+class StationOut(StationCreate):
+    id: int
